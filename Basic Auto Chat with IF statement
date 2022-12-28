@@ -1,0 +1,23 @@
+# Asking the user what their first name is.
+First = input("What is your first name?\n")
+
+# Asking the user what their last name is.
+Last = input("\nWhat is your last name?\n")
+
+# Asking the user their age.
+Age = input("\nHow old are you?\n")
+
+# Asking the user where they were born.
+Born = input("\nWhat is the city that you were born in?\n")
+
+# Combining everything into one sentence.
+print("\nYour name is " + First + " " + Last + ". You are " + Age + " years old," + " And you were born in " + Born)
+
+# Asking the user is everything that was typed is correct.
+X = input("\nIs the following correct?\nPlease Type the following: 'yes' or 'no'.\n")
+
+# If statement to continue loop the python code.
+if X == "yes":
+  print("Awesome! Thanks " + First +  ", how may I assist you today?")
+else:
+  print("Good BYE!!")
