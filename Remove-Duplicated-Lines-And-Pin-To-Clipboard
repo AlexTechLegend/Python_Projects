@@ -1,0 +1,36 @@
+Add-Type -AssemblyName System.Windows.Forms
+powershell.exe -WindowStyle Hidden -File "$PSScriptRoot"
+
+$Form = New-Object System.Windows.Forms.Form
+$Form.Text = "Remove Duplicated Lines"
+$Form.Width = 400
+$Form.Height = 325
+
+$InputLabel = New-Object System.Windows.Forms.Label
+$InputLabel.Text = "Input:"
+$InputLabel.Location = New-Object System.Drawing.Point(12, 10)
+$InputLabel.AutoSize = $true
+$Form.Controls.Add($InputLabel)
+
+$InputBox = New-Object System.Windows.Forms.TextBox
+$InputBox.Multiline = $true
+$InputBox.ScrollBars = "Vertical"
+$InputBox.Width = 350
+$InputBox.Height = 200
+$InputBox.Location = New-Object System.Drawing.Point(12, 30)
+$Form.Controls.Add($InputBox)
+
+$Button = New-Object System.Windows.Forms.Button
+$Button.Text = "Remove Duplicates"
+$Button.Location = New-Object System.Drawing.Point(12, 240)
+$Button.Width = 120
+$Form.Controls.Add($Button)
+
+$Button.Add_Click({
+    $InputStr = $InputBox.Text.Trim()
+    $OutputStr = ($InputStr -split "`r`n" | Select-Object -Unique | Where-Object { $_ -ne "" }) -join "`r`n`r`n"
+    Set-Clipboard -Value ($OutputStr -join "`r`n")
+    $InputBox.Clear()
+})
+
+$Form.ShowDialog() | Out-Null
