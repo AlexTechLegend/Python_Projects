@@ -1,0 +1,79 @@
+import tkinter as tk
+import time
+import random
+from azure.data.tables import TableServiceClient
+
+# Create a function to handle the submit button click event
+def submit():
+    # Get the user input from the entry fields
+    first_name = entry_first_name.get()
+    last_name = entry_last_name.get()
+    age = entry_age.get()
+    city = entry_city.get()
+
+    # Generate unique partition key and row key
+    partition_key = str(int(time.time()))  # Using current timestamp
+    row_key = str(random.randint(1, 100000))  # Using random number
+
+    # Connect to the Azure Storage Table
+    connection_string = "YourConnectionString"
+    table_service_client = TableServiceClient.from_connection_string(connection_string)
+    table_client = table_service_client.get_table_client(table_name="YourTableName")
+
+    # Create a new entity
+    user_entity = {
+        'PartitionKey': partition_key,
+        'RowKey': row_key,
+        'FirstName': first_name,
+        'LastName': last_name,
+        'Age': age,
+        'City': city
+    }
+
+    # Insert the entity into the table
+    table_client.create_entity(entity=user_entity)
+
+    # Clear the input fields
+    entry_first_name.delete(0, tk.END)
+    entry_last_name.delete(0, tk.END)
+    entry_age.delete(0, tk.END)
+    entry_city.delete(0, tk.END)
+
+    # Show a confirmation message
+    confirmation_label.config(text="Data submitted successfully!")
+
+# Create the main window
+window = tk.Tk()
+window.title("Chat Bot")
+
+# Create labels and entry fields for user input
+label_first_name = tk.Label(window, text="First Name:")
+label_first_name.pack()
+entry_first_name = tk.Entry(window)
+entry_first_name.pack()
+
+label_last_name = tk.Label(window, text="Last Name:")
+label_last_name.pack()
+entry_last_name = tk.Entry(window)
+entry_last_name.pack()
+
+label_age = tk.Label(window, text="Age:")
+label_age.pack()
+entry_age = tk.Entry(window)
+entry_age.pack()
+
+label_city = tk.Label(window, text="City:")
+label_city.pack()
+entry_city = tk.Entry(window)
+entry_city.pack()
+
+# Create a submit button
+submit_button = tk.Button(window, text="Submit", command=submit)
+submit_button.pack()
+
+# Create a label for confirmation message
+confirmation_label = tk.Label(window, text="")
+confirmation_label.pack()
+
+# Start the main event loop
+window.mainloop()
